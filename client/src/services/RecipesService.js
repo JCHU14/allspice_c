@@ -29,6 +29,20 @@ import { api } from "./AxiosService";
             AppState.activeRecipe = new Recipe(res.data);
           
         }
+
+        async editRecipe(recipeId, recipeData) {
+            const res = await api.put(`api/recipes/${recipeId}`, recipeData)
+            logger.log('you edited recipe', res.data)
+            const newRecipe = new Recipe(res.data)
+            AppState.activeRecipe = newRecipe
+          }
+
+          async getRecipeById(recipeId) {
+            AppState.activeRecipe = null;
+            const res = await api.get(`api/recipes/${recipeId}`);
+            logger.log("got recipe by ID", res.data);
+            AppState.activeRecipe = new Recipe(res.data);
+          }
     }
 
     export const recipesService = new RecipesService();

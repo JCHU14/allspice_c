@@ -10,28 +10,51 @@
                     <div class="container-fluid">
                         <div class="row">
 
-                            <div class="col-5">
-                                <img class="img-fluid" :src="recipes.img" alt="">
+                            <div class="col-md-5 col-12">
+                                <img class="img-fluid box-shadow" :src="recipes.img" alt="">
                             </div>
 
-                            <div class="col-7">
+                            <div class="col-md-7 col-12 my-2">
 
                                 <div class="d-flex justify-content-around">
-                                    <p class="fs-3 display-5">{{ recipes.title }}</p>
+                                    <p class="fs-3 display-5 underline">{{ recipes.title }}</p>
                                     <p class="titles rounded fs-5 p-1 text-dark">{{ recipes.category }}</p>
                                 </div>
 
                                 <section class="row my-5 justify-content-around">
 
-                                    <div class="col-5 text-center">
-                                        <p class="fs-3 bg-success rounded">Ingredients</p>
+                                    <div class="col-md-5 col-12 text-center">
+                                        <p class="fs-3 green text-light rounded">Ingredients</p>
 
                                     </div>
 
-                                    <div class="col-5 text-center">
+                                    <div class="col-md-5 col-12 text-center">
                                         <div class="titles box-shadow">
-                                            <p class="fs-2 bg-success">Recipe Steps</p>
+                                            <p class="fs-2 green text-light">Recipe Steps</p>
                                             <p class="fs-3 my-3 p-2">{{ recipes.instructions }}</p>
+                                            <form class="p-2" v-if="account?.id == recipes?.creator?.id"
+                                                @submit.prevent="editRecipe(activeRecipe.id)">
+
+
+                                                <label for="instructions" class="form-label">Edit
+                                                    instructions</label>
+
+                                                <div class="mb-3 d-flex text-center justify-content-center">
+
+                                                    <div>
+                                                        <textarea v-model="editable.instructions" maxlength="255"
+                                                            class="form-control" id="instructions" required
+                                                            rows="1"></textarea>
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button class="btn green" type="submit">+</button>
+                                                    </div>
+                                                </div>
+
+
+
+                                            </form>
                                         </div>
                                     </div>
 
@@ -51,17 +74,35 @@
 
 <script>
 
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { AppState } from '../AppState';
 import { Recipe } from '../models/Recipe';
+import { logger } from '../utils/Logger';
+import Pop from '../utils/Pop';
+import { recipesService } from '../services/RecipesService';
 
 
 export default {
     setup() {
+        const editable = ref({})
 
 
         return {
-            recipes: computed(() => AppState.activeRecipe)
+            recipes: computed(() => AppState.activeRecipe),
+            account: computed(() => AppState.account),
+            activeRecipe: computed(() => AppState.activeRecipe),
+            editable,
+
+            async editRecipe(recipeId) {
+                try {
+                    const recipeData = editable.value;
+                    logger.log("editing recipe", recipeData);
+                    await recipesService.editRecipe(recipeId, recipeData);
+                } catch (error) {
+                    logger.error("edit recipe error", error);
+                    Pop.error("recipe error", error.message);
+                }
+            },
         };
     },
 };
@@ -71,6 +112,14 @@ export default {
 <style lang="scss" scoped>
 .titles {
     background-color: rgba(128, 128, 128, 0.26);
+}
+
+.green {
+    background-color: green;
+}
+
+.underline {
+    text-decoration: 2px underline black;
 }
 
 .box-shadow {

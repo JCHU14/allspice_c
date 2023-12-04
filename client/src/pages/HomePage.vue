@@ -9,9 +9,11 @@
       </div>
 
       <div class="col-12 d-flex justify-content-center">
-        <button class="btn btn-white m-2 fs-4 box-shadow glow">Home</button>
-        <button class="btn btn-white m-2 fs-4 box-shadow glow">My Recipes</button>
-        <button class="btn btn-white m-2 fs-4 box-shadow glow">Favorites</button>
+        <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
+          <button class="btn btn-white m-2 fs-4 box-shadow glow2">Home</button>
+        </router-link>
+        <button class="btn btn-white m-2 fs-4 box-shadow glow2">My Recipes</button>
+        <button class="btn btn-white m-2 fs-4 box-shadow glow2">Favorites</button>
       </div>
 
     </div>
@@ -26,6 +28,7 @@
     </div>
 
   </div>
+  <CreateRecipeModal />
 </template>
 
 <script>
@@ -35,6 +38,7 @@ import { AppState } from '../AppState';
 import Pop from '../utils/Pop';
 import RecipeComp from '../components/RecipeComp.vue';
 import LargeModal from '../components/LargeModal.vue';
+import CreateRecipeModal from '../components/CreateRecipeModal.vue';
 
 export default {
   setup() {
@@ -53,7 +57,7 @@ export default {
       recipes: computed(() => AppState.recipes)
     };
   },
-  components: { RecipeComp, LargeModal }
+  components: { RecipeComp, LargeModal, CreateRecipeModal }
 }
 </script>
 
@@ -68,6 +72,11 @@ export default {
 
 .glow:hover {
   box-shadow: 0px 0px 50px green;
+  transition: ease-in-out 0.3s;
+}
+
+.glow2:hover {
+  box-shadow: 0px 0px 50px gold;
   transition: ease-in-out 0.3s;
 }
 

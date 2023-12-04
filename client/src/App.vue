@@ -5,8 +5,11 @@
   <main>
     <router-view />
   </main>
-  <footer class="bg-dark text-light">
-    Made with Pickles 🥒
+  <footer class="p-4 container-fluid sticky-bottom d-flex justify-content-end">
+    <div class="row">
+      <p type="button" data-bs-toggle="modal" data-bs-target="#createModal"
+        class="col-12 green text-light rounded-circle fs-1"><i class="mdi mdi-leaf"></i></p>
+    </div>
   </footer>
   <LargeModal />
 </template>
@@ -37,6 +40,10 @@ export default {
 footer {
   display: grid;
   place-content: center;
-  height: 32px;
+  // height: 32px;
+}
+
+.green {
+  background-color: green;
 }
 </style>
