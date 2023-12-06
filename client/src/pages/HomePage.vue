@@ -2,6 +2,11 @@
   <div class="container-fluid">
 
     <div class="row background-pic">
+
+      <div class="text-end p-2">
+        <Login />
+      </div>
+
       <div class="col-12 my-5">
         <p class=" display-3 text-center text">All-Spice</p>
         <p class=" display-6 text-center text">Cherish Your Family</p>
@@ -12,7 +17,8 @@
         <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
           <button class="btn btn-white m-2 fs-4 box-shadow glow2">Home</button>
         </router-link>
-        <button class="btn btn-white m-2 fs-4 box-shadow glow2">My Recipes</button>
+        <button @click="getRecipesByAccount(recipes.id)" class="btn btn-white m-2 fs-4 box-shadow glow2">My
+          Recipes</button>
         <button class="btn btn-white m-2 fs-4 box-shadow glow2">Favorites</button>
       </div>
 
@@ -39,6 +45,9 @@ import Pop from '../utils/Pop';
 import RecipeComp from '../components/RecipeComp.vue';
 import LargeModal from '../components/LargeModal.vue';
 import CreateRecipeModal from '../components/CreateRecipeModal.vue';
+import Login from '../components/Login.vue';
+import { accountService } from '../services/AccountService.js';
+import { useRoute } from 'vue-router';
 
 export default {
   setup() {
@@ -53,11 +62,27 @@ export default {
         Pop.error;
       }
     }
+
+
+    const route = useRoute();
+
+
     return {
-      recipes: computed(() => AppState.recipes)
+      recipes: computed(() => AppState.recipes),
+      account: computed(() => AppState.account),
+
+      async getRecipesByAccount(accountId) {
+        try {
+          const accountId = route.params.accountId;
+          await accountService.getRecipesByAccount(accountId)
+        }
+        catch (error) {
+          Pop.error(error);
+        }
+      },
     };
   },
-  components: { RecipeComp, LargeModal, CreateRecipeModal }
+  components: { RecipeComp, LargeModal, CreateRecipeModal, Login }
 }
 </script>
 
@@ -67,7 +92,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border: 5px solid black;
+  border: 10px solid white;
 }
 
 .glow:hover {

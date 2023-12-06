@@ -8,10 +8,18 @@ public class RecipesController : ControllerBase
     private readonly RecipesService _recipesService;
     private readonly Auth0Provider _auth0Provider;
 
-    public RecipesController(RecipesService recipesService, Auth0Provider auth0Provider)
+    private readonly IngredientsService _ingredientsService;
+    private readonly FavoritesService _favoritesService;
+
+
+
+    public RecipesController(RecipesService recipesService, Auth0Provider auth0Provider, IngredientsService ingredientsService, FavoritesService favoritesService)
     {
         _recipesService = recipesService;
         _auth0Provider = auth0Provider;
+        _ingredientsService = ingredientsService;
+        _favoritesService = favoritesService;
+
     }
 
 
@@ -98,6 +106,36 @@ public class RecipesController : ControllerBase
         }
         catch (Exception error)
         {
+            return BadRequest(error.Message);
+        }
+    }
+
+    [HttpGet("{recipeId}/ingredients")]
+    public ActionResult<List<Ingredient>> GetIngredientsByRecipeId(int recipeId)
+    {
+        try
+        {
+            List<Ingredient> ingredients = _ingredientsService.GetIngredientsByRecipeId(recipeId);
+            return Ok(ingredients);
+        }
+        catch (Exception error)
+        {
+
+            return BadRequest(error.Message);
+        }
+    }
+
+    [HttpGet("{recipeId}/favorites")]
+    public ActionResult<List<ProfileFavorites>> GetFavoritesByRecipeId(int recipeId)
+    {
+        try
+        {
+            List<ProfileFavorites> favorites = _favoritesService.GetFavoritesByRecipeId(recipeId);
+            return Ok(favorites);
+        }
+        catch (Exception error)
+        {
+
             return BadRequest(error.Message);
         }
     }

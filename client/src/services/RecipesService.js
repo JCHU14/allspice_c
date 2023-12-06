@@ -22,11 +22,12 @@ import { api } from "./AxiosService";
             AppState.recipes.push(newRecipe)
             return newRecipe;
         }
-
         async destroyRecipe(recipeId) {
+            const recipeIndex = AppState.recipes.findIndex(recipe => recipe.id == recipeId)
             const res = await api.delete(`api/recipes/${recipeId}`);
             logger.log("recipe Deleted", res.data);
             AppState.activeRecipe = new Recipe(res.data);
+            AppState.recipes.splice(recipeIndex, 1)
           
         }
 

@@ -33,6 +33,7 @@ import { computed, reactive, onMounted } from 'vue';
 import { Recipe } from '../models/Recipe';
 import Pop from '../utils/Pop';
 import { logger } from '../utils/Logger';
+import { recipesService } from '../services/RecipesService';
 export default {
     props: { recipeProp: { type: Recipe, required: true } },
 
@@ -50,7 +51,9 @@ export default {
                 } catch (error) {
                     Pop.error
                 }
-            }
+            },
+
+
         }
     }
 };
@@ -64,7 +67,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     border: 5px solid black;
-    height: 35vh;
+    height: 40vh;
     width: 100%;
 }
 
@@ -75,5 +78,18 @@ export default {
 
 .titles {
     background-color: rgba(128, 128, 128, 0.767);
+}
+
+.image {
+    position: relative;
+    width: 100%;
+
+}
+
+h2 {
+    position: absolute;
+    top: 200px;
+    left: 0;
+    width: 100%;
 }
 </style>

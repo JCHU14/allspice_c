@@ -2,8 +2,12 @@
     <div class="modal fade" id="largeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header text-end justify-content-end">
+                    <div class="justify-content-end">
+                        <button @click="deleteRecipe(activeRecipe.id)" class="bg-danger text-centers fs-4"><i
+                                class="mdi mdi-trash-can"></i></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                 </div>
 
                 <div v-if="recipes" class="modal-body">
@@ -19,6 +23,7 @@
                                 <div class="d-flex justify-content-around">
                                     <p class="fs-3 display-5 underline">{{ recipes.title }}</p>
                                     <p class="titles rounded fs-5 p-1 text-dark">{{ recipes.category }}</p>
+
                                 </div>
 
                                 <section class="row my-5 justify-content-around">
@@ -42,7 +47,7 @@
                                                 <div class="mb-3 d-flex text-center justify-content-center">
 
                                                     <div>
-                                                        <textarea v-model="editable.instructions" maxlength="255"
+                                                        <textarea v-model="editable.instructions" maxlength="100"
                                                             class="form-control" id="instructions" required
                                                             rows="1"></textarea>
                                                     </div>
@@ -57,8 +62,8 @@
                                             </form>
                                         </div>
                                     </div>
-
                                 </section>
+
 
                             </div>
                         </div>
@@ -80,6 +85,7 @@ import { Recipe } from '../models/Recipe';
 import { logger } from '../utils/Logger';
 import Pop from '../utils/Pop';
 import { recipesService } from '../services/RecipesService';
+import { Modal } from 'bootstrap';
 
 
 export default {
@@ -101,6 +107,20 @@ export default {
                 } catch (error) {
                     logger.error("edit recipe error", error);
                     Pop.error("recipe error", error.message);
+                }
+            },
+
+            async deleteRecipe(recipeId) {
+                try {
+                    const yes = await Pop.confirm(`Are you sure you want to delete this recipe?`);
+                    if (!yes) {
+                        return;
+                    }
+                    await recipesService.destroyRecipe(recipeId);
+                    Modal.getOrCreateInstance('#largeModal').hide()
+                }
+                catch (error) {
+                    Pop.error;
                 }
             },
         };

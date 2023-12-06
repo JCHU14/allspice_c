@@ -29,9 +29,27 @@
 
                             </div>
 
+                            <div>
+
+                                <div class="mb-3">
+                                    <label for="instructions"
+                                        class="form-label text-center text-dark fs-2">Instructions</label>
+                                    <textarea v-model="editable.instructions" maxlength="200" class="form-control"
+                                        id="instructions" required rows="1"></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="img" class="form-label text-center text-dark fs-2">Image</label>
+                                    <textarea v-model="editable.img" maxlength="200" class="form-control" id="img" required
+                                        rows="1"></textarea>
+                                </div>
+                            </div>
 
 
-                            <div class="text-end">
+
+
+
+                            <div class="text-end my-2">
                                 <button class="btn btn-success" type="submit">Submit</button>
                             </div>
                         </form>
@@ -49,6 +67,8 @@
 import { computed, ref } from 'vue';
 import { recipesService } from '../services/RecipesService';
 import { AppState } from '../AppState';
+import Pop from '../utils/Pop';
+import { Modal } from 'bootstrap';
 
 
 
